@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>VVVV スポーツ興味アンケート</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #111;
+      color: #fff;
+      font-family: -apple-system, 'Hiragino Sans', sans-serif;
+      min-height: 100vh;
+      padding-bottom: 120px;
+    }
+
+    .header {
+      background: #222;
+      padding: 24px 20px 20px;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
+
+    .header h1 {
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+
+    .header p {
+      font-size: 13px;
+      color: #aaa;
+      margin-top: 6px;
+    }
+
+    .section {
+      padding: 24px 16px 8px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      color: #aaa;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .sport-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .sport-card {
+      background: #222;
+      border: 2px solid #333;
+      border-radius: 14px;
+      padding: 16px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .sport-card.selected {
+      border-color: #4CAF50;
+      background: #1a2e1a;
+    }
+
+    .sport-card.selected .sport-name {
+      color: #4CAF50;
+    }
+
+    .sport-card .emoji {
+      font-size: 28px;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .sport-name {
+      font-size: 11px;
+      color: #ccc;
+      font-weight: 600;
+      line-height: 1.3;
+    }
+
+    .sport-card.all-ok {
+      grid-column: 1 / -1;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .sport-card.all-ok .emoji {
+      font-size: 22px;
+      margin: 0;
+    }
+
+    .sport-card.all-ok .sport-name {
+      font-size: 14px;
+    }
+
+    .sport-card.all-ok.selected {
+      border-color: #FFD700;
+      background: #2a2a10;
+    }
+
+    .sport-card.all-ok.selected .sport-name {
+      color: #FFD700;
+    }
+
+    .work-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .work-card {
+      background: #222;
+      border: 2px solid #333;
+      border-radius: 10px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .work-card.selected {
+      border-color: #2196F3;
+      background: #0d1a2e;
+    }
+
+    .work-card .check {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 2px solid #555;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .work-card.selected .check {
+      background: #2196F3;
+      border-color: #2196F3;
+    }
+
+    .work-card.selected .check::after {
+      content: '✓';
+      color: white;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .work-label {
+      font-size: 14px;
+      color: #ccc;
+    }
+
+    .work-card.selected .work-label {
+      color: #fff;
+    }
+
+    .submit-area {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 16px;
+      background: linear-gradient(transparent, #111 30%);
+      padding-top: 32px;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 16px;
+      background: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 1px;
+    }
+
+    .submit-btn:disabled {
+      background: #333;
+      color: #666;
+    }
+
+    .submit-btn:not(:disabled):active {
+      transform: scale(0.98);
+      background: #388E3C;
+    }
+
+    .hint {
+      font-size: 12px;
+      color: #666;
+      text-align: center;
+      margin-top: 8px;
+    }
+
+    .success-screen {
+      display: none;
+      min-height: 100vh;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 24px;
+    }
+
+    .success-screen.show {
+      display: flex;
+    }
+
+    .success-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+
+    .success-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .success-msg {
+      font-size: 14px;
+      color: #aaa;
+      line-height: 1.8;
+    }
+
+    .loading {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .form-content { display: none; }
+    .form-content.show { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="loading" id="loading">読み込み中...</div>
+
+<div class="form-content" id="formContent">
+  <div class="header">
+    <h1>VVVV(ブイフォー)</h1>
+    <p>気になるスポーツを教えてください！<br>ぴったりな情報だけをお届けします🏃</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title">興味のあるスポーツ（複数選択OK）</div>
+    <div class="sport-grid">
+      <div class="sport-card" data-value="フットサル" onclick="toggleSport(this)">
+        <span class="emoji">⚽</span>
+        <span class="sport-name">フットサル</span>
+      </div>
+      <div class="sport-card" data-value="バレーボール" onclick="toggleSport(this)">
+        <span class="emoji">🏐</span>
+        <span class="sport-name">バレーボール</span>
+      </div>
+      <div class="sport-card" data-value="バスケットボール" onclick="toggleSport(this)">
+        <span class="emoji">🏀</span>
+        <span class="sport-name">バスケット</span>
+      </div>
+      <div class="sport-card" data-value="ヨガ" onclick="toggleSport(this)">
+        <span class="emoji">🧘</span>
+        <span class="sport-name">ヨガ</span>
+      </div>
+      <div class="sport-card" data-value="ピラティス" onclick="toggleSport(this)">
+        <span class="emoji">🤸</span>
+        <span class="sport-name">ピラティス</span>
+      </div>
+      <div class="sport-card" data-value="ピックルボール" onclick="toggleSport(this)">
+        <span class="emoji">🏓</span>
+        <span class="sport-name">ピックル<br>ボール</span>
+      </div>
+      <div class="sport-card" data-value="バドミントン" onclick="toggleSport(this)">
+        <span class="emoji">🏸</span>
+        <span class="sport-name">バドミントン</span>
+      </div>
+      <div class="sport-card" data-value="ランニング" onclick="toggleSport(this)">
+        <span class="emoji">🏃</span>
+        <span class="sport-name">ランニング</span>
+      </div>
+      <div class="sport-card" data-value="dummy" style="visibility:hidden;"></div>
+      <div class="sport-card all-ok" data-value="なんでも" onclick="toggleAllOk(this)">
+        <span class="emoji">🌟</span>
+        <span class="sport-name">なんでも参加したい！</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">何系のお仕事ですか？（任意）</div>
+    <div class="work-grid">
+      <div class="work-card" data-value="IT・エンジニア系" onclick="toggleWork(this)">
+        <div class="check"></div>
+        <span class="work-label">💻 IT・エンジニア系</span>
+      </div>
+      <div class="work-card" data-value="デザイン・クリエイティブ系" onclick="toggleWork(this)">
+        <div class="check"></div>
+        <span class="work-label">🎨 デザイン・クリエイティブ系</span>
+      </div>
+      <div class="work-card" data-value="営業・マーケティング系" onclick="toggleWork(this)">
+        <div class="check"></div>
+        <span class="work-label">📊 営業・マーケティング系</span>
+      </div>
+      <div class="work-card" data-value="経営・管理職" onclick="toggleWork(this)">
+        <div class="check"></div>
+        <span class="work-label">👔 経営・管理職</span>
+      </div>
+      <div class="work-card" data-value="医療・福祉系" onclick="toggleWork(this)">
+        <div class="check"></div>
+        <span class="work-label">🏥 医療・福祉系</span>
+      </div>
+      <div class="work-card" data-value="教育・保育系" onclick="toggleWork(this)">
+        <div class="check"></div>
+        <span class="work-label">📚 教育・保育系</span>
+      </div>
+      <div class="work-card" data-value="飲食・サービス系" onclick="toggleWork(this)">
+        <div class="check"></div>
+        <span class="work-label">🍽 飲食・サービス系</span>
+      </div>
+      <div class="work-card" data-value="現場・建設・製造系" onclick="toggleWork(this)">
+        <div class="check"></div>
+        <span class="work-label">🔧 現場・建設・製造系</span>
+      </div>
+      <div class="work-card" data-value="運送・物流系" onclick="toggleWork(this)">
+        <div class="check"></div>
+        <span class="work-label">🚚 運送・物流系</span>
+      </div>
+      <div class="work-card" data-value="フリーランス・自営業" onclick="toggleWork(this)">
+        <div class="check"></div>
+        <span class="work-label">🏠 フリーランス・自営業</span>
+      </div>
+      <div class="work-card" data-value="学生・その他" onclick="toggleWork(this)">
+        <div class="check"></div>
+        <span class="work-label">🎓 学生・その他</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="submit-area">
+    <button class="submit-btn" id="submitBtn" onclick="submitForm()" disabled>
+      スポーツを選んでください
+    </button>
+  </div>
+</div>
+
+<div class="success-screen" id="successScreen">
+  <div class="success-icon">🎉</div>
+  <div class="success-title">登録完了！</div>
+  <div class="success-msg">
+    選んでくれたスポーツの<br>
+    情報をお届けしていきます。<br><br>
+    またVVVVでお会いしましょう！🏃
+  </div>
+</div>
+
+<script>
+  const LIFF_ID = 'YOUR_LIFF_ID'; // ← ここを書き換える
+
+  let selectedSports = new Set();
+  let selectedWorks = new Set();
+
+  async function initLiff() {
+    try {
+      await liff.init({ liffId: LIFF_ID });
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('formContent').classList.add('show');
+    } catch (e) {
+      document.getElementById('loading').textContent = 'エラーが発生しました。再度お試しください。';
+    }
+  }
+
+  function toggleSport(el) {
+    const val = el.dataset.value;
+    if (el.classList.contains('selected')) {
+      el.classList.remove('selected');
+      selectedSports.delete(val);
+    } else {
+      el.classList.add('selected');
+      selectedSports.add(val);
+    }
+    updateButton();
+  }
+
+  function toggleAllOk(el) {
+    const val = el.dataset.value;
+    if (el.classList.contains('selected')) {
+      el.classList.remove('selected');
+      selectedSports.delete(val);
+    } else {
+      // なんでも選んだら他を全解除
+      document.querySelectorAll('.sport-card:not(.all-ok)').forEach(c => {
+        c.classList.remove('selected');
+      });
+      selectedSports.clear();
+      el.classList.add('selected');
+      selectedSports.add(val);
+    }
+    updateButton();
+  }
+
+  function toggleWork(el) {
+    const val = el.dataset.value;
+    if (el.classList.contains('selected')) {
+      el.classList.remove('selected');
+      selectedWorks.delete(val);
+    } else {
+      el.classList.add('selected');
+      selectedWorks.add(val);
+    }
+  }
+
+  function updateButton() {
+    const btn = document.getElementById('submitBtn');
+    if (selectedSports.size > 0) {
+      btn.disabled = false;
+      btn.textContent = `${selectedSports.size}つ選択中 → 登録する`;
+    } else {
+      btn.disabled = true;
+      btn.textContent = 'スポーツを選んでください';
+    }
+  }
+
+  async function submitForm() {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = '送信中...';
+
+    const messages = [];
+
+    // スポーツごとにメッセージ送信（自動返信・タグ付けに使用）
+    selectedSports.forEach(sport => {
+      messages.push({ type: 'text', text: sport });
+    });
+
+    // 仕事系があれば追加
+    if (selectedWorks.size > 0) {
+      messages.push({ type: 'text', text: '仕事系：' + [...selectedWorks].join('、') });
+    }
+
+    try {
+      if (liff.isInClient()) {
+        await liff.sendMessages(messages);
+      }
+      // 成功画面
+      document.getElementById('formContent').style.display = 'none';
+      document.getElementById('successScreen').classList.add('show');
+      setTimeout(() => {
+        if (liff.isInClient()) liff.closeWindow();
+      }, 2500);
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = 'もう一度試す';
+    }
+  }
+
+  initLiff();
+</script>
+</body>
+</html>
