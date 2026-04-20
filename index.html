@@ -384,13 +384,15 @@
   let selectedWorks = new Set();
 
   async function initLiff() {
+    // タイムアウト付きでLIFF初期化、失敗してもフォームは表示する
+    const timeout = new Promise((_, reject) => setTimeout(() => reject('timeout'), 5000));
     try {
-      await liff.init({ liffId: LIFF_ID });
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('formContent').classList.add('show');
+      await Promise.race([liff.init({ liffId: LIFF_ID }), timeout]);
     } catch (e) {
-      document.getElementById('loading').textContent = 'エラーが発生しました。再度お試しください。';
+      console.warn('LIFF init failed or timed out:', e);
     }
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('formContent').classList.add('show');
   }
 
   function toggleSport(el) {
