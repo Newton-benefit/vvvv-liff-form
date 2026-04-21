@@ -9,46 +9,68 @@
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
-      background: #111;
-      color: #fff;
-      font-family: -apple-system, 'Hiragino Sans', sans-serif;
+      background: #f5f5f5;
+      color: #333;
+      font-family: -apple-system, 'Hiragino Sans', 'Yu Gothic', sans-serif;
       min-height: 100vh;
       padding-bottom: 120px;
     }
 
     .header {
-      background: #222;
-      padding: 24px 20px 20px;
+      background: #06C755;
+      padding: 28px 20px 22px;
       text-align: center;
-      border-bottom: 1px solid #333;
     }
 
-    .header h1 { font-size: 22px; font-weight: 700; letter-spacing: 2px; }
-    .header p { font-size: 13px; color: #aaa; margin-top: 6px; }
+    .header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 1px;
+    }
 
-    .section { padding: 24px 16px 8px; }
+    .header p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.85);
+      margin-top: 6px;
+      line-height: 1.6;
+    }
+
+    .section {
+      padding: 20px 16px 4px;
+    }
 
     .section-title {
       font-size: 13px;
-      color: #aaa;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 12px;
+      color: #666;
+      font-weight: 700;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
+
+    .badge {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 10px;
+      font-weight: 600;
+    }
+
+    .badge-required { background: #06C755; color: #fff; }
 
     /* スポーツグリッド */
     .sport-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 8px;
     }
 
     .sport-card {
-      background: #222;
-      border: 2px solid #333;
-      border-radius: 14px;
-      padding: 16px 8px;
+      background: #fff;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 14px 6px;
       text-align: center;
       cursor: pointer;
       transition: all 0.15s ease;
@@ -57,116 +79,107 @@
     }
 
     .sport-card.selected {
-      border-color: #4CAF50;
-      background: #1a2e1a;
+      border-color: #06C755;
+      background: #e8f9ee;
     }
 
-    .sport-card.selected .sport-name { color: #4CAF50; }
+    .sport-card.selected .sport-name { color: #06C755; }
 
-    .sport-card .emoji { font-size: 28px; display: block; margin-bottom: 6px; }
+    .sport-card .emoji { font-size: 26px; display: block; margin-bottom: 5px; }
 
     .sport-name {
       font-size: 11px;
-      color: #ccc;
+      color: #555;
       font-weight: 600;
       line-height: 1.3;
     }
 
     .sport-card.all-ok {
       grid-column: 1 / -1;
-      padding: 14px;
+      padding: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
+      gap: 8px;
     }
 
-    .sport-card.all-ok .emoji { font-size: 22px; margin: 0; }
+    .sport-card.all-ok .emoji { font-size: 20px; margin: 0; }
     .sport-card.all-ok .sport-name { font-size: 14px; }
 
     .sport-card.all-ok.selected {
-      border-color: #FFD700;
-      background: #2a2a10;
+      border-color: #06C755;
+      background: #e8f9ee;
     }
 
-    .sport-card.all-ok.selected .sport-name { color: #FFD700; }
+    .sport-card.all-ok.selected .sport-name { color: #06C755; }
 
-    /* 参加スタイルグリッド（2x2） */
+    /* 参加スタイル */
     .style-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 10px;
+      gap: 8px;
     }
 
     .style-card {
-      background: #222;
-      border: 2px solid #333;
-      border-radius: 14px;
-      padding: 16px 12px;
+      background: #fff;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 14px 12px;
       cursor: pointer;
       transition: all 0.15s ease;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
     }
 
     .style-card.selected {
-      border-color: #2196F3;
-      background: #0d1a2e;
+      border-color: #06C755;
+      background: #e8f9ee;
     }
 
-    .style-card .s-emoji { font-size: 24px; }
+    .style-card .s-emoji { font-size: 22px; display: block; margin-bottom: 5px; }
 
     .style-name {
       font-size: 13px;
-      color: #ccc;
+      color: #333;
       font-weight: 700;
       line-height: 1.3;
+      display: block;
     }
 
-    .style-card.selected .style-name { color: #2196F3; }
+    .style-card.selected .style-name { color: #06C755; }
 
     .style-desc {
       font-size: 11px;
-      color: #666;
-      line-height: 1.3;
+      color: #999;
+      margin-top: 3px;
+      display: block;
     }
 
-    .style-card.selected .style-desc { color: #555; }
-
-    /* 性別・年齢グリッド */
-    .option-grid {
+    /* 性別・年齢 */
+    .option-row {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
     }
 
-    .option-card {
-      background: #222;
-      border: 2px solid #333;
-      border-radius: 10px;
-      padding: 10px 18px;
+    .option-chip {
+      background: #fff;
+      border: 2px solid #e0e0e0;
+      border-radius: 20px;
+      padding: 8px 18px;
       cursor: pointer;
       transition: all 0.15s ease;
       user-select: none;
       -webkit-tap-highlight-color: transparent;
       font-size: 14px;
-      color: #ccc;
+      color: #555;
       font-weight: 600;
     }
 
-    .option-card.selected-gender {
-      border-color: #E91E63;
-      background: #2a0d1a;
-      color: #E91E63;
-    }
-
-    .option-card.selected-age {
-      border-color: #00BCD4;
-      background: #0d2a2e;
-      color: #00BCD4;
+    .option-chip.selected {
+      border-color: #06C755;
+      background: #e8f9ee;
+      color: #06C755;
     }
 
     /* 送信エリア */
@@ -175,30 +188,33 @@
       bottom: 0;
       left: 0;
       right: 0;
-      padding: 16px;
-      background: linear-gradient(transparent, #111 30%);
-      padding-top: 32px;
+      padding: 12px 16px 20px;
+      background: linear-gradient(transparent, #f5f5f5 25%);
+      padding-top: 28px;
     }
 
     .submit-btn {
       width: 100%;
       padding: 16px;
-      background: #4CAF50;
+      background: #06C755;
       color: white;
       border: none;
-      border-radius: 14px;
+      border-radius: 12px;
       font-size: 16px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.15s;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
 
-    .submit-btn:disabled { background: #333; color: #666; }
+    .submit-btn:disabled {
+      background: #ccc;
+      color: #fff;
+    }
 
     .submit-btn:not(:disabled):active {
       transform: scale(0.98);
-      background: #388E3C;
+      background: #05a847;
     }
 
     /* 成功画面 */
@@ -210,12 +226,13 @@
       justify-content: center;
       text-align: center;
       padding: 40px 24px;
+      background: #f5f5f5;
     }
 
     .success-screen.show { display: flex; }
     .success-icon { font-size: 64px; margin-bottom: 20px; }
-    .success-title { font-size: 22px; font-weight: 700; margin-bottom: 10px; }
-    .success-msg { font-size: 14px; color: #aaa; line-height: 1.8; }
+    .success-title { font-size: 22px; font-weight: 700; margin-bottom: 10px; color: #06C755; }
+    .success-msg { font-size: 14px; color: #777; line-height: 1.8; }
 
     .loading {
       display: flex;
@@ -223,32 +240,17 @@
       justify-content: center;
       min-height: 100vh;
       font-size: 14px;
-      color: #666;
+      color: #999;
+      background: #f5f5f5;
     }
 
     .form-content { display: none; }
     .form-content.show { display: block; }
 
-    .required-badge {
-      display: inline-block;
-      font-size: 10px;
-      background: #F44336;
-      color: white;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-left: 6px;
-      vertical-align: middle;
-    }
-
-    .optional-badge {
-      display: inline-block;
-      font-size: 10px;
-      background: #555;
-      color: #aaa;
-      padding: 2px 6px;
-      border-radius: 4px;
-      margin-left: 6px;
-      vertical-align: middle;
+    .divider {
+      height: 8px;
+      background: #f0f0f0;
+      margin: 8px 0 0;
     }
   </style>
 </head>
@@ -262,9 +264,8 @@
     <p>あなたにぴったりな情報をお届けするために<br>教えてください🏃</p>
   </div>
 
-  <!-- スポーツ -->
   <div class="section">
-    <div class="section-title">興味のあるスポーツ <span class="required-badge">必須・複数OK</span></div>
+    <div class="section-title">興味のあるスポーツ <span class="badge badge-required">必須・複数OK</span></div>
     <div class="sport-grid">
       <div class="sport-card" data-value="フットサル" onclick="toggleSport(this)">
         <span class="emoji">⚽</span>
@@ -306,9 +307,10 @@
     </div>
   </div>
 
-  <!-- 参加スタイル -->
+  <div class="divider"></div>
+
   <div class="section">
-    <div class="section-title">参加スタイル <span class="required-badge">必須・1つ</span></div>
+    <div class="section-title">参加スタイル <span class="badge badge-required">必須・1つ</span></div>
     <div class="style-grid">
       <div class="style-card" data-value="スタイル：公園・外遊び感覚" onclick="selectStyle(this)">
         <span class="s-emoji">🌳</span>
@@ -333,31 +335,33 @@
     </div>
   </div>
 
-  <!-- 性別 -->
+  <div class="divider"></div>
+
   <div class="section">
-    <div class="section-title">性別 <span class="required-badge">必須・1つ</span></div>
-    <div class="option-grid">
-      <div class="option-card" data-value="性別：男性" onclick="selectGender(this)">👨 男性</div>
-      <div class="option-card" data-value="性別：女性" onclick="selectGender(this)">👩 女性</div>
-      <div class="option-card" data-value="性別：その他" onclick="selectGender(this)">🧑 その他</div>
+    <div class="section-title">性別 <span class="badge badge-required">必須・1つ</span></div>
+    <div class="option-row">
+      <div class="option-chip" data-value="性別：男性" onclick="selectGender(this)">👨 男性</div>
+      <div class="option-chip" data-value="性別：女性" onclick="selectGender(this)">👩 女性</div>
+      <div class="option-chip" data-value="性別：その他" onclick="selectGender(this)">🧑 その他</div>
     </div>
   </div>
 
-  <!-- 年齢層 -->
+  <div class="divider"></div>
+
   <div class="section">
-    <div class="section-title">年齢層 <span class="required-badge">必須・1つ</span></div>
-    <div class="option-grid">
-      <div class="option-card" data-value="年齢：10代" onclick="selectAge(this)">10代</div>
-      <div class="option-card" data-value="年齢：20代" onclick="selectAge(this)">20代</div>
-      <div class="option-card" data-value="年齢：30代" onclick="selectAge(this)">30代</div>
-      <div class="option-card" data-value="年齢：40代" onclick="selectAge(this)">40代</div>
-      <div class="option-card" data-value="年齢：50代以上" onclick="selectAge(this)">50代以上</div>
+    <div class="section-title">年齢層 <span class="badge badge-required">必須・1つ</span></div>
+    <div class="option-row">
+      <div class="option-chip" data-value="年齢：10代" onclick="selectAge(this)">10代</div>
+      <div class="option-chip" data-value="年齢：20代" onclick="selectAge(this)">20代</div>
+      <div class="option-chip" data-value="年齢：30代" onclick="selectAge(this)">30代</div>
+      <div class="option-chip" data-value="年齢：40代" onclick="selectAge(this)">40代</div>
+      <div class="option-chip" data-value="年齢：50代以上" onclick="selectAge(this)">50代以上</div>
     </div>
   </div>
 
   <div class="submit-area">
     <button class="submit-btn" id="submitBtn" onclick="submitForm()" disabled>
-      スポーツと参加スタイルを選んでください
+      スポーツを選んでください
     </button>
   </div>
 </div>
@@ -424,15 +428,15 @@
   }
 
   function selectGender(el) {
-    document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected-gender'));
-    el.classList.add('selected-gender');
+    document.querySelectorAll('.option-chip[data-value^="性別"]').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
     selectedGender = el.dataset.value;
     updateButton();
   }
 
   function selectAge(el) {
-    document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected-age'));
-    el.classList.add('selected-age');
+    document.querySelectorAll('.option-chip[data-value^="年齢"]').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
     selectedAge = el.dataset.value;
     updateButton();
   }
@@ -463,22 +467,10 @@
     btn.textContent = '送信中...';
 
     const messages = [];
-
-    selectedSports.forEach(sport => {
-      messages.push({ type: 'text', text: sport });
-    });
-
-    if (selectedStyle) {
-      messages.push({ type: 'text', text: selectedStyle });
-    }
-
-    if (selectedGender) {
-      messages.push({ type: 'text', text: selectedGender });
-    }
-
-    if (selectedAge) {
-      messages.push({ type: 'text', text: selectedAge });
-    }
+    selectedSports.forEach(sport => messages.push({ type: 'text', text: sport }));
+    if (selectedStyle) messages.push({ type: 'text', text: selectedStyle });
+    if (selectedGender) messages.push({ type: 'text', text: selectedGender });
+    if (selectedAge) messages.push({ type: 'text', text: selectedAge });
 
     try {
       if (liff.isInClient()) {
