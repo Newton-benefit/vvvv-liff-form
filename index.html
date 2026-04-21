@@ -335,7 +335,7 @@
 
   <!-- 性別 -->
   <div class="section">
-    <div class="section-title">性別 <span class="optional-badge">任意</span></div>
+    <div class="section-title">性別 <span class="required-badge">必須・1つ</span></div>
     <div class="option-grid">
       <div class="option-card" data-value="性別：男性" onclick="selectGender(this)">👨 男性</div>
       <div class="option-card" data-value="性別：女性" onclick="selectGender(this)">👩 女性</div>
@@ -345,7 +345,7 @@
 
   <!-- 年齢層 -->
   <div class="section">
-    <div class="section-title">年齢層 <span class="optional-badge">任意</span></div>
+    <div class="section-title">年齢層 <span class="required-badge">必須・1つ</span></div>
     <div class="option-grid">
       <div class="option-card" data-value="年齢：10代" onclick="selectAge(this)">10代</div>
       <div class="option-card" data-value="年齢：20代" onclick="selectAge(this)">20代</div>
@@ -427,25 +427,33 @@
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected-gender'));
     el.classList.add('selected-gender');
     selectedGender = el.dataset.value;
+    updateButton();
   }
 
   function selectAge(el) {
     document.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected-age'));
     el.classList.add('selected-age');
     selectedAge = el.dataset.value;
+    updateButton();
   }
 
   function updateButton() {
     const btn = document.getElementById('submitBtn');
-    if (selectedSports.size > 0 && selectedStyle) {
+    if (selectedSports.size > 0 && selectedStyle && selectedGender && selectedAge) {
       btn.disabled = false;
-      btn.textContent = `登録する →`;
+      btn.textContent = '登録する →';
     } else if (selectedSports.size === 0) {
       btn.disabled = true;
-      btn.textContent = 'スポーツと参加スタイルを選んでください';
-    } else {
+      btn.textContent = 'スポーツを選んでください';
+    } else if (!selectedStyle) {
       btn.disabled = true;
       btn.textContent = '参加スタイルを選んでください';
+    } else if (!selectedGender) {
+      btn.disabled = true;
+      btn.textContent = '性別を選んでください';
+    } else {
+      btn.disabled = true;
+      btn.textContent = '年齢層を選んでください';
     }
   }
 
