@@ -471,6 +471,7 @@
     if (selectedStyle) messages.push({ type: 'text', text: selectedStyle });
     if (selectedGender) messages.push({ type: 'text', text: selectedGender });
     if (selectedAge) messages.push({ type: 'text', text: selectedAge });
+    messages.push({ type: 'text', text: '登録完了' });
 
     try {
       if (liff.isInClient()) {
