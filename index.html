@@ -497,8 +497,6 @@
       el.classList.remove('selected');
       selectedSports.delete('なんでも');
     } else {
-      document.querySelectorAll('.sport-card:not(.all-ok)').forEach(c => c.classList.remove('selected'));
-      selectedSports.clear();
       el.classList.add('selected');
       selectedSports.add('なんでも');
     }
@@ -604,6 +602,17 @@
       const data = await res.json();
       const friend = (data?.data?.items || []).find(f => f.lineUserId === profile.userId);
       if (friend) {
+        // 既存の同カテゴリタグを削除（上書き）
+        const existingTagIds = (friend.tags || []).map(t => t.id);
+        const formTagIds = Object.values(TAG_MAP);
+        const toRemove = existingTagIds.filter(id => formTagIds.includes(id));
+        await Promise.all(toRemove.map(tagId =>
+          fetch(`${API_BASE}/api/friends/${friend.id}/tags/${tagId}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${API_KEY}` }
+          })
+        ));
+        // 新しいタグを追加
         await Promise.all(selections.map(sel => {
           const tagId = TAG_MAP[sel];
           if (!tagId) return Promise.resolve();
