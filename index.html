@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>VVVV スポーツ興味アンケート</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -420,51 +421,7 @@
 </div>
 
 <script>
-  const API_BASE = 'https://vvvv.yuto-sekiya.workers.dev';
-  const API_KEY = 'a8ab0b2ae1704a1ff204e8c164189478361ba90f31877a9772631310453b356a';
-  const TAG_MAP = {
-    'フットサル':              'fa05bdbf-53f6-44a0-858f-6a6b8189258d',
-    'バレーボール':            'e1f51ca7-b3fd-4de5-86fb-669460fda4b1',
-    'バスケットボール':        '6c231c89-a23c-4e10-968c-dd52d3bfa242',
-    'ヨガ':                    'c66623b6-f4f3-488e-b37f-8ffac2bd198c',
-    'ピラティス':              'd17f340d-175a-4c87-b328-f35c9edef602',
-    'ピックルボール':          '5b4c5a07-a297-492d-85da-7a965b747dcd',
-    'バドミントン':            '9bcfb586-3143-4c7e-8a77-734f870ff8b9',
-    'ランニング':              'fd7b52a5-fda3-499a-b7da-a62d504f6d8b',
-    'なんでも':                'bf4eab96-4268-4451-a105-de82cf1a364e',
-    'スタイル：公園・外遊び感覚': '3e6a6bfe-d9aa-41ba-bd2c-501ced3607cb',
-    'スタイル：ビギナー':      '6ac17e9f-4b39-4f05-a0f3-fed0455c875b',
-    'スタイル：エンジョイ派':  '1bc937fd-1e3c-4d52-9ae9-0fdfb425fa5b',
-    'スタイル：本格的に・大会も': '011560a0-0161-4aa8-9a57-6bdecc58174a',
-    '性別：男性':              '9b3e2ae8-0532-4f85-9cee-4d135106f5ab',
-    '性別：女性':              'b8296db6-0672-47f4-9207-d4fe79beff50',
-    '性別：その他':            '9672dfa6-99a5-4e3d-ac95-2c88a9393065',
-    '年齢：10代':              'f5616dae-79f5-4cbd-b5a4-f90a10712a87',
-    '年齢：20代':              '2ac3391f-2519-40ea-8f19-11f23a56e160',
-    '年齢：30代':              '7ad789c5-3fbe-4470-9f41-ced304bef2bf',
-    '年齢：40代':              'd3460b48-2ddc-40db-8636-639a851ba54c',
-    '年齢：50代以上':          '1b97eb19-89af-4920-98e2-fc00fc613660',
-    '運動：毎日':              'ee3f4652-def8-4693-9d64-5176b2546c7c',
-    '運動：週3-4回':           '45007d81-da2c-4c5c-a58a-ca8ef97fff6b',
-    '運動：週1-2回':           'c452f096-ad36-47ba-bb2b-b44fd415b6aa',
-    '運動：月に数回':          '503619df-47b0-44d1-9540-3a1da1f25165',
-    '運動：ほとんどしない':    'e1dfe5ef-bbd0-4585-8a98-065817c4ae1e',
-    '職場：施設あり':          '702c462a-86c6-4453-a0c2-7c7302cd85fa',
-    '職場：サークルあり':      'dd39b6a2-d034-43a1-bd2f-b6c272d06841',
-    '職場：特になし':          'cefcdec5-5a67-48f1-9942-9def3eea4293',
-    '職場：個人事業主':        '84dbada9-d6ac-4dad-a9a9-a4f72b12d2f3',
-    '業種：IT・エンジニア':    'a71cf271-393d-497b-9a35-a1ce13eb6e2b',
-    '業種：デザイン・クリエイティブ': 'cc4d6f2e-1cfb-45e7-8078-9f78e10f6de5',
-    '業種：営業・マーケティング': 'fe594f00-c6b6-43df-8306-da07e025fb96',
-    '業種：経営・管理職':      '8c03045a-0c0f-477b-ba65-658e38f247c6',
-    '業種：医療・福祉':        '296c82b6-d49d-456d-bc94-ed08958ad44f',
-    '業種：教育・保育':        '1fa27b31-4e9b-43df-8751-13aebd0de3dc',
-    '業種：飲食・サービス':    '48024712-947b-4cb2-b824-f1dce484056b',
-    '業種：建設・製造':        '9a005182-b46d-46e5-baa2-adda972e641d',
-    '業種：運送・物流':        'f1e212aa-fb15-4d8c-b7dd-51c2eb5b9b21',
-    '業種：フリーランス・自営業': '5a4ad2d4-1ed7-42e9-a9eb-5584e2aef5fe',
-    '業種：学生・その他':      '553f974e-3499-44c6-bb95-b1f118bf75b3',
-  };
+  const LIFF_ID = '2009829957-6szxjOhb';
 
   let selectedSports = new Set();
   let selectedStyle = null;
@@ -474,7 +431,13 @@
   let selectedWorkExercise = null;
   let selectedIndustry = null;
 
-  function initForm() {
+  async function initLiff() {
+    const timeout = new Promise((_, reject) => setTimeout(() => reject('timeout'), 5000));
+    try {
+      await Promise.race([liff.init({ liffId: LIFF_ID }), timeout]);
+    } catch (e) {
+      console.warn('LIFF init failed:', e);
+    }
     document.getElementById('loading').style.display = 'none';
     document.getElementById('formContent').classList.add('show');
   }
@@ -581,33 +544,34 @@
     btn.disabled = true;
     btn.textContent = '送信中...';
 
-    const friendId = new URLSearchParams(window.location.search).get('fid');
-    if (!friendId) {
-      btn.textContent = 'URLが正しくありません';
-      return;
-    }
-
-    const selections = [...selectedSports, selectedStyle, selectedGender, selectedAge, selectedFrequency, selectedWorkExercise, selectedIndustry].filter(Boolean);
+    const messages = [];
+    selectedSports.forEach(sport => messages.push({ type: 'text', text: sport }));
+    if (selectedStyle) messages.push({ type: 'text', text: selectedStyle });
+    if (selectedGender) messages.push({ type: 'text', text: selectedGender });
+    if (selectedAge) messages.push({ type: 'text', text: selectedAge });
+    if (selectedFrequency) messages.push({ type: 'text', text: selectedFrequency });
+    if (selectedWorkExercise) messages.push({ type: 'text', text: selectedWorkExercise });
+    if (selectedIndustry) messages.push({ type: 'text', text: selectedIndustry });
+    messages.push({ type: 'text', text: '登録完了' });
 
     try {
-      await Promise.all(selections.map(sel => {
-        const tagId = TAG_MAP[sel];
-        if (!tagId) return Promise.resolve();
-        return fetch(`${API_BASE}/api/friends/${friendId}/tags`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ tagId })
-        });
-      }));
+      if (liff.isInClient()) {
+        for (let i = 0; i < messages.length; i += 5) {
+          await liff.sendMessages(messages.slice(i, i + 5));
+        }
+      }
       document.getElementById('formContent').style.display = 'none';
       document.getElementById('successScreen').classList.add('show');
+      setTimeout(() => {
+        try { if (liff.isInClient()) liff.closeWindow(); } catch(e) {}
+      }, 2500);
     } catch (e) {
       btn.disabled = false;
       btn.textContent = 'もう一度試す';
     }
   }
 
-  initForm();
+  initLiff();
 </script>
 </body>
 </html>
