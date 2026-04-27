@@ -377,7 +377,6 @@
   <div class="section">
     <div class="section-title">職場での運動機会 <span class="badge badge-required">必須・1つ</span></div>
     <div class="option-row">
-      <div class="option-chip" data-value="職場：施設あり" onclick="selectWorkExercise(this)">🏟 体育施設あり</div>
       <div class="option-chip" data-value="職場：サークルあり" onclick="selectWorkExercise(this)">🤝 社内サークルあり</div>
       <div class="option-chip" data-value="職場：社内イベント" onclick="selectWorkExercise(this)">🎊 社内イベント</div>
       <div class="option-chip" data-value="職場：特になし" onclick="selectWorkExercise(this)">特になし</div>
@@ -413,11 +412,8 @@
 <div class="success-screen" id="successScreen">
   <div class="success-icon">✅</div>
   <div class="success-title">登録できました！</div>
-  <div class="success-msg">
-    選んでくれた内容をもとに<br>
-    あなたにぴったりな情報だけをお届けします。<br><br>
-    VVVVでたくさん汗かきましょう！🏃
-  </div>
+  <div class="success-msg">以下の内容で登録しました</div>
+  <div id="successSummary" style="width:100%;max-width:340px;margin:16px auto 0;text-align:left;background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08)"></div>
 </div>
 
 <script>
@@ -562,6 +558,21 @@
       }
       document.getElementById('formContent').style.display = 'none';
       document.getElementById('successScreen').classList.add('show');
+      const rows = [
+        { label: '🏃 スポーツ', value: [...selectedSports].join('・') },
+        { label: '🎯 参加スタイル', value: (selectedStyle||'').replace('スタイル：','') },
+        { label: '👤 性別', value: (selectedGender||'').replace('性別：','') },
+        { label: '📅 年齢', value: (selectedAge||'').replace('年齢：','') },
+        { label: '💪 運動頻度', value: (selectedFrequency||'').replace('運動：','') },
+        { label: '🏢 職場', value: (selectedWorkExercise||'').replace('職場：','') },
+        { label: '💼 業種', value: (selectedIndustry||'').replace('業種：','') },
+      ];
+      document.getElementById('successSummary').innerHTML = rows.map(r =>
+        `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:13px">
+          <span style="color:#999">${r.label}</span>
+          <span style="color:#333;font-weight:600;text-align:right">${r.value}</span>
+        </div>`
+      ).join('');
       setTimeout(() => {
         try { if (liff.isInClient()) liff.closeWindow(); } catch(e) {}
       }, 2500);
