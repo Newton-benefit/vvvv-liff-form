@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>VVVV スポーツ興味アンケート</title>
-  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -377,20 +376,38 @@
 </div>
 
 <script>
-  const LIFF_ID = '2009829957-6szxjOhb';
+  const API_BASE = 'https://vvvv.yuto-sekiya.workers.dev';
+  const API_KEY = 'a8ab0b2ae1704a1ff204e8c164189478361ba90f31877a9772631310453b356a';
+  const TAG_MAP = {
+    'フットサル':              'fa05bdbf-53f6-44a0-858f-6a6b8189258d',
+    'バレーボール':            'e1f51ca7-b3fd-4de5-86fb-669460fda4b1',
+    'バスケットボール':        '6c231c89-a23c-4e10-968c-dd52d3bfa242',
+    'ヨガ':                    'c66623b6-f4f3-488e-b37f-8ffac2bd198c',
+    'ピラティス':              'd17f340d-175a-4c87-b328-f35c9edef602',
+    'ピックルボール':          '5b4c5a07-a297-492d-85da-7a965b747dcd',
+    'バドミントン':            '9bcfb586-3143-4c7e-8a77-734f870ff8b9',
+    'ランニング':              'fd7b52a5-fda3-499a-b7da-a62d504f6d8b',
+    'なんでも':                'bf4eab96-4268-4451-a105-de82cf1a364e',
+    'スタイル：公園・外遊び感覚': '3e6a6bfe-d9aa-41ba-bd2c-501ced3607cb',
+    'スタイル：ビギナー':      '6ac17e9f-4b39-4f05-a0f3-fed0455c875b',
+    'スタイル：エンジョイ派':  '1bc937fd-1e3c-4d52-9ae9-0fdfb425fa5b',
+    'スタイル：本格的に・大会も': '011560a0-0161-4aa8-9a57-6bdecc58174a',
+    '性別：男性':              '9b3e2ae8-0532-4f85-9cee-4d135106f5ab',
+    '性別：女性':              'b8296db6-0672-47f4-9207-d4fe79beff50',
+    '性別：その他':            '9672dfa6-99a5-4e3d-ac95-2c88a9393065',
+    '年齢：10代':              'f5616dae-79f5-4cbd-b5a4-f90a10712a87',
+    '年齢：20代':              '2ac3391f-2519-40ea-8f19-11f23a56e160',
+    '年齢：30代':              '7ad789c5-3fbe-4470-9f41-ced304bef2bf',
+    '年齢：40代':              'd3460b48-2ddc-40db-8636-639a851ba54c',
+    '年齢：50代以上':          '1b97eb19-89af-4920-98e2-fc00fc613660',
+  };
 
   let selectedSports = new Set();
   let selectedStyle = null;
   let selectedGender = null;
   let selectedAge = null;
 
-  async function initLiff() {
-    const timeout = new Promise((_, reject) => setTimeout(() => reject('timeout'), 5000));
-    try {
-      await Promise.race([liff.init({ liffId: LIFF_ID }), timeout]);
-    } catch (e) {
-      console.warn('LIFF init failed or timed out:', e);
-    }
+  function initForm() {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('formContent').classList.add('show');
   }
@@ -466,29 +483,33 @@
     btn.disabled = true;
     btn.textContent = '送信中...';
 
-    const messages = [];
-    selectedSports.forEach(sport => messages.push({ type: 'text', text: sport }));
-    if (selectedStyle) messages.push({ type: 'text', text: selectedStyle });
-    if (selectedGender) messages.push({ type: 'text', text: selectedGender });
-    if (selectedAge) messages.push({ type: 'text', text: selectedAge });
-    messages.push({ type: 'text', text: '登録完了' });
+    const friendId = new URLSearchParams(window.location.search).get('fid');
+    if (!friendId) {
+      btn.textContent = 'URLが正しくありません';
+      return;
+    }
+
+    const selections = [...selectedSports, selectedStyle, selectedGender, selectedAge].filter(Boolean);
 
     try {
-      if (liff.isInClient()) {
-        await liff.sendMessages(messages);
-      }
+      await Promise.all(selections.map(sel => {
+        const tagId = TAG_MAP[sel];
+        if (!tagId) return Promise.resolve();
+        return fetch(`${API_BASE}/api/friends/${friendId}/tags`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ tagId })
+        });
+      }));
       document.getElementById('formContent').style.display = 'none';
       document.getElementById('successScreen').classList.add('show');
-      setTimeout(() => {
-        if (liff.isInClient()) liff.closeWindow();
-      }, 2500);
     } catch (e) {
       btn.disabled = false;
       btn.textContent = 'もう一度試す';
     }
   }
 
-  initLiff();
+  initForm();
 </script>
 </body>
 </html>
