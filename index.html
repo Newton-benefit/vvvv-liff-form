@@ -358,6 +358,50 @@
     </div>
   </div>
 
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title">週の運動頻度 <span class="badge badge-required">必須・1つ</span></div>
+    <div class="option-row">
+      <div class="option-chip" data-value="運動：毎日" onclick="selectFrequency(this)">毎日</div>
+      <div class="option-chip" data-value="運動：週3-4回" onclick="selectFrequency(this)">週3〜4回</div>
+      <div class="option-chip" data-value="運動：週1-2回" onclick="selectFrequency(this)">週1〜2回</div>
+      <div class="option-chip" data-value="運動：月に数回" onclick="selectFrequency(this)">月に数回</div>
+      <div class="option-chip" data-value="運動：ほとんどしない" onclick="selectFrequency(this)">ほとんどしない</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title">職場での運動機会 <span class="badge badge-required">必須・1つ</span></div>
+    <div class="option-row">
+      <div class="option-chip" data-value="職場：施設あり" onclick="selectWorkExercise(this)">🏟 体育施設あり</div>
+      <div class="option-chip" data-value="職場：サークルあり" onclick="selectWorkExercise(this)">🤝 社内サークルあり</div>
+      <div class="option-chip" data-value="職場：特になし" onclick="selectWorkExercise(this)">特になし</div>
+      <div class="option-chip" data-value="職場：個人事業主" onclick="selectWorkExercise(this)">個人事業主</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title">業種 <span class="badge badge-required">必須・1つ</span></div>
+    <div class="option-row">
+      <div class="option-chip" data-value="業種：IT・エンジニア" onclick="selectIndustry(this)">💻 IT・エンジニア</div>
+      <div class="option-chip" data-value="業種：デザイン・クリエイティブ" onclick="selectIndustry(this)">🎨 デザイン</div>
+      <div class="option-chip" data-value="業種：営業・マーケティング" onclick="selectIndustry(this)">📊 営業・マーケ</div>
+      <div class="option-chip" data-value="業種：経営・管理職" onclick="selectIndustry(this)">💼 経営・管理職</div>
+      <div class="option-chip" data-value="業種：医療・福祉" onclick="selectIndustry(this)">🏥 医療・福祉</div>
+      <div class="option-chip" data-value="業種：教育・保育" onclick="selectIndustry(this)">📚 教育・保育</div>
+      <div class="option-chip" data-value="業種：飲食・サービス" onclick="selectIndustry(this)">🍽 飲食・サービス</div>
+      <div class="option-chip" data-value="業種：建設・製造" onclick="selectIndustry(this)">🏗 建設・製造</div>
+      <div class="option-chip" data-value="業種：運送・物流" onclick="selectIndustry(this)">🚚 運送・物流</div>
+      <div class="option-chip" data-value="業種：フリーランス・自営業" onclick="selectIndustry(this)">🆓 フリーランス</div>
+      <div class="option-chip" data-value="業種：学生・その他" onclick="selectIndustry(this)">🎓 学生・その他</div>
+    </div>
+  </div>
+
   <div class="submit-area">
     <button class="submit-btn" id="submitBtn" onclick="submitForm()" disabled>
       スポーツを選んでください
@@ -400,12 +444,35 @@
     '年齢：30代':              '7ad789c5-3fbe-4470-9f41-ced304bef2bf',
     '年齢：40代':              'd3460b48-2ddc-40db-8636-639a851ba54c',
     '年齢：50代以上':          '1b97eb19-89af-4920-98e2-fc00fc613660',
+    '運動：毎日':              'ee3f4652-def8-4693-9d64-5176b2546c7c',
+    '運動：週3-4回':           '45007d81-da2c-4c5c-a58a-ca8ef97fff6b',
+    '運動：週1-2回':           'c452f096-ad36-47ba-bb2b-b44fd415b6aa',
+    '運動：月に数回':          '503619df-47b0-44d1-9540-3a1da1f25165',
+    '運動：ほとんどしない':    'e1dfe5ef-bbd0-4585-8a98-065817c4ae1e',
+    '職場：施設あり':          '702c462a-86c6-4453-a0c2-7c7302cd85fa',
+    '職場：サークルあり':      'dd39b6a2-d034-43a1-bd2f-b6c272d06841',
+    '職場：特になし':          'cefcdec5-5a67-48f1-9942-9def3eea4293',
+    '職場：個人事業主':        '84dbada9-d6ac-4dad-a9a9-a4f72b12d2f3',
+    '業種：IT・エンジニア':    'a71cf271-393d-497b-9a35-a1ce13eb6e2b',
+    '業種：デザイン・クリエイティブ': 'cc4d6f2e-1cfb-45e7-8078-9f78e10f6de5',
+    '業種：営業・マーケティング': 'fe594f00-c6b6-43df-8306-da07e025fb96',
+    '業種：経営・管理職':      '8c03045a-0c0f-477b-ba65-658e38f247c6',
+    '業種：医療・福祉':        '296c82b6-d49d-456d-bc94-ed08958ad44f',
+    '業種：教育・保育':        '1fa27b31-4e9b-43df-8751-13aebd0de3dc',
+    '業種：飲食・サービス':    '48024712-947b-4cb2-b824-f1dce484056b',
+    '業種：建設・製造':        '9a005182-b46d-46e5-baa2-adda972e641d',
+    '業種：運送・物流':        'f1e212aa-fb15-4d8c-b7dd-51c2eb5b9b21',
+    '業種：フリーランス・自営業': '5a4ad2d4-1ed7-42e9-a9eb-5584e2aef5fe',
+    '業種：学生・その他':      '553f974e-3499-44c6-bb95-b1f118bf75b3',
   };
 
   let selectedSports = new Set();
   let selectedStyle = null;
   let selectedGender = null;
   let selectedAge = null;
+  let selectedFrequency = null;
+  let selectedWorkExercise = null;
+  let selectedIndustry = null;
 
   function initForm() {
     document.getElementById('loading').style.display = 'none';
@@ -458,9 +525,31 @@
     updateButton();
   }
 
+  function selectFrequency(el) {
+    document.querySelectorAll('.option-chip[data-value^="運動"]').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedFrequency = el.dataset.value;
+    updateButton();
+  }
+
+  function selectWorkExercise(el) {
+    document.querySelectorAll('.option-chip[data-value^="職場"]').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedWorkExercise = el.dataset.value;
+    updateButton();
+  }
+
+  function selectIndustry(el) {
+    document.querySelectorAll('.option-chip[data-value^="業種"]').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedIndustry = el.dataset.value;
+    updateButton();
+  }
+
   function updateButton() {
     const btn = document.getElementById('submitBtn');
-    if (selectedSports.size > 0 && selectedStyle && selectedGender && selectedAge) {
+    const allSelected = selectedSports.size > 0 && selectedStyle && selectedGender && selectedAge && selectedFrequency && selectedWorkExercise && selectedIndustry;
+    if (allSelected) {
       btn.disabled = false;
       btn.textContent = '登録する →';
     } else if (selectedSports.size === 0) {
@@ -472,9 +561,18 @@
     } else if (!selectedGender) {
       btn.disabled = true;
       btn.textContent = '性別を選んでください';
-    } else {
+    } else if (!selectedAge) {
       btn.disabled = true;
       btn.textContent = '年齢層を選んでください';
+    } else if (!selectedFrequency) {
+      btn.disabled = true;
+      btn.textContent = '運動頻度を選んでください';
+    } else if (!selectedWorkExercise) {
+      btn.disabled = true;
+      btn.textContent = '職場の運動機会を選んでください';
+    } else {
+      btn.disabled = true;
+      btn.textContent = '業種を選んでください';
     }
   }
 
@@ -489,7 +587,7 @@
       return;
     }
 
-    const selections = [...selectedSports, selectedStyle, selectedGender, selectedAge].filter(Boolean);
+    const selections = [...selectedSports, selectedStyle, selectedGender, selectedAge, selectedFrequency, selectedWorkExercise, selectedIndustry].filter(Boolean);
 
     try {
       await Promise.all(selections.map(sel => {
