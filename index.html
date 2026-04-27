@@ -402,6 +402,19 @@
     </div>
   </div>
 
+  <div class="divider"></div>
+
+  <div class="section">
+    <div class="section-title">どこで知りましたか？ <span class="badge badge-required">必須・1つ</span></div>
+    <div class="option-row">
+      <div class="option-chip" data-value="流入：Instagram" onclick="selectSource(this)">📸 Instagram</div>
+      <div class="option-chip" data-value="流入：YouTube" onclick="selectSource(this)">▶️ YouTube</div>
+      <div class="option-chip" data-value="流入：ウェブ" onclick="selectSource(this)">🌐 ウェブ</div>
+      <div class="option-chip" data-value="流入：友人" onclick="selectSource(this)">👥 友人</div>
+      <div class="option-chip" data-value="流入：職場の方" onclick="selectSource(this)">🏢 職場の方</div>
+    </div>
+  </div>
+
   <div class="submit-area">
     <button class="submit-btn" id="submitBtn" onclick="submitForm()" disabled>
       スポーツを選んでください
@@ -411,9 +424,12 @@
 
 <div class="success-screen" id="successScreen">
   <div class="success-icon">✅</div>
-  <div class="success-title">登録できました！</div>
-  <div class="success-msg">以下の内容で登録しました</div>
-  <div id="successSummary" style="width:100%;max-width:340px;margin:16px auto 0;text-align:left;background:#fff;border-radius:12px;padding:16px;box-shadow:0 2px 8px rgba(0,0,0,0.08)"></div>
+  <div class="success-title">登録完了しました！</div>
+  <div class="success-msg">
+    選んでくれた内容をもとに<br>
+    あなたにぴったりな情報をお届けします。<br><br>
+    VVVVでたくさん汗かきましょう！🏃
+  </div>
 </div>
 
 <script>
@@ -426,6 +442,7 @@
   let selectedFrequency = null;
   let selectedWorkExercise = null;
   let selectedIndustry = null;
+  let selectedSource = null;
 
   async function initLiff() {
     const timeout = new Promise((_, reject) => setTimeout(() => reject('timeout'), 5000));
@@ -505,9 +522,16 @@
     updateButton();
   }
 
+  function selectSource(el) {
+    document.querySelectorAll('.option-chip[data-value^="流入"]').forEach(c => c.classList.remove('selected'));
+    el.classList.add('selected');
+    selectedSource = el.dataset.value;
+    updateButton();
+  }
+
   function updateButton() {
     const btn = document.getElementById('submitBtn');
-    const allSelected = selectedSports.size > 0 && selectedStyle && selectedGender && selectedAge && selectedFrequency && selectedWorkExercise && selectedIndustry;
+    const allSelected = selectedSports.size > 0 && selectedStyle && selectedGender && selectedAge && selectedFrequency && selectedWorkExercise && selectedIndustry && selectedSource;
     if (allSelected) {
       btn.disabled = false;
       btn.textContent = '登録する →';
@@ -529,9 +553,12 @@
     } else if (!selectedWorkExercise) {
       btn.disabled = true;
       btn.textContent = '職場の運動機会を選んでください';
-    } else {
+    } else if (!selectedIndustry) {
       btn.disabled = true;
       btn.textContent = '業種を選んでください';
+    } else {
+      btn.disabled = true;
+      btn.textContent = 'どこで知りましたか？を選んでください';
     }
   }
 
@@ -548,6 +575,7 @@
     if (selectedFrequency) messages.push({ type: 'text', text: selectedFrequency });
     if (selectedWorkExercise) messages.push({ type: 'text', text: selectedWorkExercise });
     if (selectedIndustry) messages.push({ type: 'text', text: selectedIndustry });
+    if (selectedSource) messages.push({ type: 'text', text: selectedSource });
     messages.push({ type: 'text', text: '登録完了' });
 
     try {
@@ -558,21 +586,6 @@
       }
       document.getElementById('formContent').style.display = 'none';
       document.getElementById('successScreen').classList.add('show');
-      const rows = [
-        { label: '🏃 スポーツ', value: [...selectedSports].join('・') },
-        { label: '🎯 参加スタイル', value: (selectedStyle||'').replace('スタイル：','') },
-        { label: '👤 性別', value: (selectedGender||'').replace('性別：','') },
-        { label: '📅 年齢', value: (selectedAge||'').replace('年齢：','') },
-        { label: '💪 運動頻度', value: (selectedFrequency||'').replace('運動：','') },
-        { label: '🏢 職場', value: (selectedWorkExercise||'').replace('職場：','') },
-        { label: '💼 業種', value: (selectedIndustry||'').replace('業種：','') },
-      ];
-      document.getElementById('successSummary').innerHTML = rows.map(r =>
-        `<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid #f0f0f0;font-size:13px">
-          <span style="color:#999">${r.label}</span>
-          <span style="color:#333;font-weight:600;text-align:right">${r.value}</span>
-        </div>`
-      ).join('');
       setTimeout(() => {
         try { if (liff.isInClient()) liff.closeWindow(); } catch(e) {}
       }, 2500);
